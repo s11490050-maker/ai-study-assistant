@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="使用 Python、uv 與 Ollama 串流功能製作的 AI 學習助教。">
+  <title>AI 學習助教｜Python LLM 專題</title>
+  <style>
+    :root { color-scheme: light; --red:#b91c0c; --ink:#202938; --muted:#5b6472; --paper:#f7f8fb; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif; color:var(--ink); background:var(--paper); line-height:1.75; }
+    header { padding:76px 22px 64px; color:white; background:linear-gradient(125deg,#991b1b,#dc3d25); }
+    .wrap { width:min(960px,92%); margin:auto; }
+    .eyebrow { letter-spacing:.12em; font-size:.85rem; opacity:.85; }
+    h1 { font-size:clamp(2.2rem,6vw,4rem); line-height:1.2; margin:.4rem 0 1rem; }
+    header p { max-width:680px; font-size:1.12rem; }
+    main { padding:30px 0 70px; }
+    section { background:white; padding:28px clamp(20px,4vw,38px); margin:20px 0; border:1px solid #e5e7eb; border-radius:16px; box-shadow:0 8px 24px #1822300a; }
+    h2 { margin:0 0 14px; font-size:1.45rem; color:var(--red); }
+    h3 { margin-bottom:6px; }
+    .chips { display:flex; flex-wrap:wrap; gap:9px; margin-top:22px; }
+    .chip { border:1px solid #ffffff70; padding:5px 12px; border-radius:999px; font-size:.9rem; }
+    pre { overflow:auto; background:#171923; color:#e8eaf0; padding:18px; border-radius:10px; font-size:.9rem; }
+    code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .steps { padding-left:1.3rem; }
+    .result { border-left:4px solid var(--red); padding:12px 18px; background:#fff5f2; border-radius:0 10px 10px 0; }
+    footer { text-align:center; color:var(--muted); padding:24px; font-size:.9rem; }
+    a { color:var(--red); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">PYTHON × LARGE LANGUAGE MODEL</div>
+    <h1>AI 學習助教</h1>
+    <p>把課程問題交給本機 AI，透過串流方式即時取得繁體中文解說，讓程式設計與課堂觀念更容易理解。</p>
+    <div class="chips"><span class="chip">Python</span><span class="chip">uv</span><span class="chip">Ollama</span><span class="chip">Streaming</span></div>
+  </div>
+</header>
+<main class="wrap">
+  <section>
+    <h2>一、作品做了什麼</h2>
+    <p>本作品是一個命令列 AI 學習助教。使用者輸入課程或程式設計問題後，Python 程式會呼叫本機 Ollama 模型，並以串流方式逐段顯示回答。</p>
+    <ul>
+      <li>以繁體中文回答，適合初學者閱讀。</li>
+      <li>回答盡量包含結論、步驟與簡短範例。</li>
+      <li>使用者可連續提問，輸入 <code>q</code> 結束程式。</li>
+      <li>使用本機模型，不需要雲端 API 金鑰。</li>
+    </ul>
+  </section>
+  <section>
+    <h2>二、使用工具與技術</h2>
+    <ul>
+      <li><strong>Python：</strong>主要程式語言。</li>
+      <li><strong>uv：</strong>管理 Python 套件與執行環境。</li>
+      <li><strong>Ollama：</strong>在本機執行大型語言模型。</li>
+      <li><strong>Streaming：</strong>設定 <code>stream=True</code>，逐段讀取模型輸出並即時顯示。</li>
+      <li><strong>GitHub Actions：</strong>自動將 <code>docs/</code> 部署到 GitHub Pages。</li>
+    </ul>
+  </section>
+  <section>
+    <h2>三、如何執行</h2>
+    <ol class="steps">
+      <li>安裝 Python 3.10+、uv 與 Ollama。</li>
+      <li>下載模型：<code>ollama pull qwen2.5:3b</code>。</li>
+      <li>複製專案並安裝依賴：<code>uv sync</code>。</li>
+      <li>複製 <code>.env.example</code> 為 <code>.env</code>，依需求設定模型名稱。</li>
+      <li>執行：<code>uv run study-assistant</code>。</li>
+    </ol>
+    <pre><code>git clone https://github.com/你的GitHub帳號/ai-study-assistant.git
+cd ai-study-assistant
+uv sync
+uv run study-assistant</code></pre>
+  </section>
+  <section>
+    <h2>四、執行結果</h2>
+    <p>以下為示意畫面，實際回答會依模型版本與提問內容不同。</p>
+    <div class="result">
+      <strong>使用者：</strong>Python 的 list 和 tuple 有什麼差別？<br>
+      <strong>AI 助教：</strong>簡單來說，list（串列）可以修改，tuple（元組）建立後不能修改。list 使用中括號，例如 <code>[1, 2, 3]</code>；tuple 使用小括號，例如 <code>(1, 2, 3)</code>。需要新增或修改資料時通常使用 list；資料固定時可考慮 tuple。
+    </div>
+  </section>
+  <section>
+    <h2>五、AI 使用說明</h2>
+    <ul>
+      <li><strong>工具：</strong>Ollama 與 Python <code>ollama</code> 套件。</li>
+      <li><strong>使用位置：</strong><code>src/ai_study_assistant/main.py</code> 的 <code>ask_ollama()</code> 函式。</li>
+      <li><strong>使用能力：</strong>串流輸出（Streaming）；透過 <code>stream=True</code> 取得生成片段並即時印出。</li>
+      <li><strong>自行修改：</strong>設計主題、系統提示詞、互動流程、環境變數、錯誤處理及作品頁內容。</li>
+      <li><strong>自行驗證：</strong>測試一般提問、空白輸入、結束指令及 Ollama 連線失敗情況。AI 內容仍需自行查證。</li>
+    </ul>
+  </section>
+  <section>
+    <h2>GitHub 專案</h2>
+    <p>將本專案推送到自己的 GitHub Repository 後，請把下方連結替換成你的實際 Repository 網址。</p>
+    <p><a href="https://github.com/">前往 GitHub</a></p>
+  </section>
+</main>
+<footer>AI 學習助教｜Python LLM 課程作業</footer>
+</body>
+</html>
